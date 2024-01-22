@@ -1,0 +1,4 @@
+cbgt_net/miniworld_fire_data/minst_full_test.txt filter=lfs diff=lfs merge=lfs -text
+cbgt_net/cifar_test.txt filter=lfs diff=lfs merge=lfs -text
+cbgt_net/miniworld_fire_data/minst_full_train.txt filter=lfs diff=lfs merge=lfs -text
+cbgt_net/cifar_train.txt filter=lfs diff=lfs merge=lfs -text
