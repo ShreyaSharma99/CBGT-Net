@@ -1,4 +1,4 @@
-# Sample Efficient Learning of Novel Visual Concepts
+# CBGT-Net: A Neuromimetic Architecture for Robust Classification of Streaming Data
 
 This is a Tensorflow implementation of the paper "CBGT-Net: A Neuromimetic Architecture for Robust Classification of Streaming Data"</a></b></i> published at IEEE ICHMS 2024.
 
