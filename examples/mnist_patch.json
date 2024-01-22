@@ -1,0 +1,125 @@
+{
+	"model": {
+		"num_categories": 10,
+		"evidence_module": {
+			"class": "cbgt_net.components.EvidenceShapePatchEncoder",
+			"properties": {
+				"num_hidden_units": 25,
+				"hidden_activation": "relu",
+				"output_activation" : "softmax",
+				"input_shape": [28, 28, 3],
+				"evidence_dim": 128,
+				"use_lenet5": false
+			}
+		},
+		"accumulator_module": {
+			"class": "cbgt_net.components.SimpleAccumulatorModule",
+			"properties": {
+				"batch_size": 512,
+				"evidence_dim": 128
+			}
+		},
+		"threshold_module": {
+			"class": "cbgt_net.components.FixedDecisionThresholdModule",
+			"properties": {
+				"num_categories": 10,
+				"decision_threshold": 4
+			}
+		},
+		"parameters": {
+			"decision_threshold": 0.1
+		}
+	},
+	"environment": {
+		"class": "cbgt_net.environments.MNISTCategoricalEnvironmentPadded",
+		"properties": {
+			"categories": 10,
+			"noise": 0.0,
+			"batch_size": 512,
+			"image_shape": [28, 28, 3],
+			"patch_size": [12, 12, 3],
+			"images_per_class_train": 5421,
+			"images_per_class_test": 892,
+			"max_steps_per_episode": 50
+		}	
+	},
+	"trainer": {
+		"class": "cbgt_net.training.REINFORCE_Trainer",
+		"properties": {
+			"discount_factor": 0.95,
+			"max_steps_per_episode": 50,
+			"max_steps_per_epoch": 1000,
+			"learning_rate" : 1e-3,
+			"ce_loss": true,
+			"dynamic_thresh_flag": false
+		},
+		"optimizer": null,
+		"rewards": [
+			{
+				"class": "cbgt_net.training.reward.SimpleCategoricalReward",
+				"properties": {
+					"correct_guess_reward": 30,
+					"incorrect_guess_reward": -30,
+					"timeout_reward": -30,
+					"no_guess_reward": 0,
+					"tardiness_rate": 0
+				},
+				"weight" : 1.0,
+				"name" : "reinforce"
+			}
+		],
+		"losses": [
+			{
+				"class": "cbgt_net.training.losses.CE_Loss",
+				"properties": {
+					"timesteps": 50,
+					"num_batches": 512
+				},
+				"weight" : 1.0,
+				"name" : "reinforce"
+			},
+			{
+				"class": "cbgt_net.training.losses.EntropyLoss",
+				"properties": {
+				},
+				"weight" : 0.0,
+				"name" : "entropy"
+			}
+		],
+		"measures": [
+				{
+				"class": "cbgt_net.training.measures.AccuracyMeasure",
+				"properties": {
+				}
+			}
+		]
+	},
+	"observers": [
+		{
+			"class": "cbgt_net.observers.ConsoleProgressMonitor",
+			"properties": {
+				"tb_logs_path": "logs/gradient_shape_0.2noise_2loss_1dynamicThresh_noDecayAccum_LeNet2_10Lac_512batch_15maxStep_stacked"
+			}
+		},
+		{
+			"class": "cbgt_net.observers.TensorboardMonitor",
+			"properties": {
+				"log_path": "logs_new/checkpoints_mnist_patch_8_50&10data_2Losses_0.1ElossMasked_2fixedThreshold_50maxSteps_512batchSize_shallowEnc",
+				"file_prefix": "unused",
+				"frequency": 5000,
+				"max_to_keep": 5
+			}
+		},
+		{
+			"class": "cbgt_net.observers.CheckpointManager",
+			"properties": {
+				"checkpoint_path": "logs_checkpoint/checkpoints_mnist_patch_8_50&10data_2Losses_0.1ElossMasked_2fixedThreshold_50maxSteps_512batchSize_shallowEnc"
+			}
+		}
+	],
+	"random_seed": 41,
+	"num_episodes": 5000000,
+	"evaluation_rate": 500,
+	"num_evaluation_episodes": 1000,
+	"load_from_checkpoint": 1
+}
