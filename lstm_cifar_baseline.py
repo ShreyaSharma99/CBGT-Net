@@ -13,10 +13,10 @@ import pickle
 from cbgt_net.environments import CIFAR_CategoricalEnvironment
 from tensorflow.keras.optimizers.schedules import ExponentialDecay
 from baselines.resnet import *
-import time
+# import time
 
 
-start_time = time.time()
+# start_time = time.time()
 
 tf.random.set_seed(
     21
@@ -100,7 +100,7 @@ eval_freq = 100
 # training = False
 last_x_losses = 1000
 
-if log_results: out_file = open('./lstm_cifar/runs_seed20/out_3layer_ResNet18_padded_8_LSTM_300k_new', 'a')
+if log_results: out_file = open('./baselines/logs/lstm_cifar', 'a')
 
 for i in range(len(patch_size_list)):
     patch_size = patch_size_list[i]
@@ -135,7 +135,7 @@ for i in range(len(patch_size_list)):
         best_test_acc = 0
         tf_step=0 
         best_acc, curr_epoch = tf.Variable(0.0), tf.Variable(0.0)
-        ckpt_path = "./lstm_cifar/runs_seed20/checkpoints/" + "ResNet18_padded_"+ str(patch_size[0]) +"patch_" +  str(int(s_len)) + "_seqLen_LSTM_300k"
+        ckpt_path = "./baselines/logs/checkpoint_lstm_cifar_"+ str(patch_size[0]) +"patch_" +  str(int(s_len)) + "_seqLen"
         
         ckpt = tf.train.Checkpoint(curr_epoch=curr_epoch, best_acc=best_acc, optimizer=optimizer, model=model)
         manager = tf.train.CheckpointManager(ckpt, ckpt_path, max_to_keep=1)
@@ -214,7 +214,7 @@ for i in range(len(patch_size_list)):
         ax3.set_xlabel('epoch')
 
         if log_results:
-            file_name = "./baselines/lstm_cifar/runs_seed20/plot_3layer_ResNet18_padded_"+ str(patch_size[0]) +"patch_" +  str(int(s_len)) + "_seqLen_300k_new"
+            file_name = "./baselines/logs/graph_lstm_cifar_"+ str(patch_size[0]) +"patch_" +  str(int(s_len)) + "_seqLen"
             fig.savefig(file_name)
 
         plt.clf()
@@ -224,13 +224,6 @@ for i in range(len(patch_size_list)):
 if log_results: out_file.close()
     # plt.show()
 
-
-end_time = time.time()
-
-# Calculate the elapsed time
-elapsed_time = end_time - start_time
-
-# Print or log the elapsed time
-print(f"Total time taken: {elapsed_time:.2f} seconds")
-if log_results:
-    out_file.write(f"Total time taken: {elapsed_time:.2f} seconds \n")
+# # Print or log the elapsed time
+# if log_results:
+#     out_file.write(f"Total time taken: {elapsed_time:.2f} seconds \n")

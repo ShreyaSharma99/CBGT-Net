@@ -31,7 +31,7 @@
 		}
 	},
 	"environment": {
-		"class": "cbgt_net.environments.MNISTCategoricalEnvironmentPadded",
+		"class": "cbgt_net.environments.MNISTCategoricalEnvironment",
 		"properties": {
 			"categories": 10,
 			"noise": 0.0,

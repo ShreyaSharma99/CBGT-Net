@@ -125,12 +125,12 @@ class CIFAR_CategoricalEnvironment(Environment):
 			# self._image_data_train = tf.convert_to_tensor(self._image_data_train, dtype=tf.float32)
 			# self._image_data_test = tf.convert_to_tensor(self._image_data_test, tf.float32)
 
-			serialized_tensor_train = tf.io.read_file('cbgt_net/cifar_train.txt')
+			serialized_tensor_train = tf.io.read_file('cbgt_net/cbgt_net_data/cifar_train.txt')
 			# self._image_data_train = tf.io.parse_tensor(serialized_tensor_train, out_type=tf.float32)[..., :1]
 			self._image_data_train = tf.io.parse_tensor(serialized_tensor_train, out_type=tf.uint8)
 
 
-			serialized_tensor_test = tf.io.read_file('cbgt_net/cifar_test.txt')
+			serialized_tensor_test = tf.io.read_file('cbgt_net/cbgt_net_data/cifar_test.txt')
 			self._image_data_test = tf.io.parse_tensor(serialized_tensor_test, out_type=tf.uint8)
 
 

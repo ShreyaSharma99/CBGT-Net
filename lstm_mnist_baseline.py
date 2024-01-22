@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import random
 import pickle
-from cbgt_net.environments import MNISTCategoricalEnvironmentPadded
+from cbgt_net.environments import MNISTCategoricalEnvironment
 from tensorflow.keras.optimizers.schedules import ExponentialDecay
 from keras.datasets import mnist
 # from baselines.resnet import *
@@ -108,8 +108,8 @@ last_x_acc = 500
 conf_acc = 0.005
 
 # file_name = '/home/shreya/cbgt_net/baselines/rnn_cifar/out_complete_patch_' + str(patch_size_list[0][0]) '_10seq.txt'
-log_file = 'out_lenet5_10_8_5patch_70Kepochs_lstm_lr1e-3'
-if log_results: out_file = open('./lstm_mnist/updated2/' + log_file + '.txt', 'a')
+# log_file = 'out_lenet5_10_8_5patch_70Kepochs_lstm_lr1e-3'
+if log_results: out_file = open('./baselines/logs/lstm_mnist', 'a')
 
 for i in range(len(patch_size_list)):
     patch_size = patch_size_list[i]
@@ -141,9 +141,7 @@ for i in range(len(patch_size_list)):
         loss_list, acc_list , acc_list_test, loss_list_test = [], [], [], []
         best_test_acc = 0
         best_acc, curr_epoch = tf.Variable(0.0), tf.Variable(0.0)
-        ckpt_path = "/home/shreya/cbgt_net/baselines/lstm_mnist/updated2/checkpoints/" + str(patch_size[0]) +"patch_" +  str(int(s_len)) + "_seqLen_50k"
-        # ckpt_path = "/home/shreya/cbgt_net/baselines/lstm_mnist/new_runs
-        #/checkpoints/8patch_" +  str(int(s_len)) + "_seqLen_50k"
+        ckpt_path = "./baselines/logs/checkpoint_lstm_mnist_"+ str(patch_size[0]) +"patch_" +  str(int(s_len)) + "_seqLen"
         
         ckpt = tf.train.Checkpoint(curr_epoch=curr_epoch, best_acc=best_acc, optimizer=optimizer, model=model)
         manager = tf.train.CheckpointManager(ckpt, ckpt_path, max_to_keep=1)
@@ -236,7 +234,7 @@ for i in range(len(patch_size_list)):
         ax3.set_xlabel('epoch')
 
         if log_results:
-            file_name = "/home/shreya/cbgt_net/baselines/lstm_mnist/updated2/plot_lenet_padded_"+ str(patch_size[0]) +"patch_" +  str(int(s_len)) + "_seqLen_70k_lstm"
+            file_name = "./baselines/logs/graph_lstm_mnist_"+ str(patch_size[0]) +"patch_" +  str(int(s_len)) + "_seqLen"
             fig.savefig(file_name)
 
         plt.clf()

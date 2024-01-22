@@ -19,9 +19,10 @@ In case you find our work useful, consider citing:
 ## Index
 
 1. [Environment Setup](#setup)
-2. [Training Models](#training)
-3. [Evaluating CBGT Model](#evaluation)
-4. [License](#license)
+2. [Dataset Preparation](#dataset-preparation)
+3. [Training Models](#training)
+4. [Evaluating CBGT Model](#evaluation)
+5. [License](#license)
 
 ## Setup
 
@@ -34,6 +35,11 @@ Activate environment using:
 ```
 conda activate py39
 ```
+
+## Dataset Preparation
+
+* Download the cifar and mnist patch dataset for this <a href="https://drive.google.com/drive/folders/1LvTeIBBy1SVSsTYUu6fL9_Ozus03Uhk-?usp=sharing">Drive Link</a>. <br>
+Now add this folder to the ```cbgt_net``` folder before running any experiments on cbgt-net.
 
 ## Training
 

@@ -125,13 +125,29 @@ class MNISTCategoricalEnvironment(Environment):
 			# self._image_data_train = tf.convert_to_tensor(self._image_data_train, dtype=tf.float32)
 			# self._image_data_test = tf.convert_to_tensor(self._image_data_test, tf.float32)
 
-			serialized_tensor_train = tf.io.read_file('cbgt_net/mnist_train50.txt')
+			serialized_tensor_train = tf.io.read_file('cbgt_net/cbgt_net_data/minst_full_train.txt')
 			# self._image_data_train = tf.io.parse_tensor(serialized_tensor_train, out_type=tf.float32)[..., :1]
-			self._image_data_train = tf.io.parse_tensor(serialized_tensor_train, out_type=tf.float32)
+			self._image_data_train = tf.io.parse_tensor(serialized_tensor_train, out_type=tf.uint8)
 
 
-			serialized_tensor_test = tf.io.read_file('cbgt_net/mnist_test10.txt')
-			self._image_data_test = tf.io.parse_tensor(serialized_tensor_test, out_type=tf.float32)
+			serialized_tensor_test = tf.io.read_file('cbgt_net/cbgt_net_data/minst_full_test.txt')
+			self._image_data_test = tf.io.parse_tensor(serialized_tensor_test, out_type=tf.uint8)
+
+			image_shape = self._base_env._patch_size
+			# print("org images shape = ", image_shape)
+			desired_shape = (28, 28, 3)
+			pad_height = desired_shape[0] - image_shape[0]
+			pad_width = desired_shape[1] - image_shape[1]
+			# Calculate the amount of padding on each side
+			top_pad = int(pad_height // 2)
+			bottom_pad = int(pad_height - top_pad)
+			left_pad = int(pad_width // 2)
+			right_pad = int(pad_width - left_pad)
+
+			# print("top_pad = ", top_pad, bottom_pad)
+			# Use TensorFlow's tf.pad function to add padding to all images in the batch
+			self._paddings = tf.constant([[0, 0], [top_pad, bottom_pad], [left_pad, right_pad], [0, 0]], dtype=tf.int32)
+
 
 
 
@@ -210,9 +226,17 @@ class MNISTCategoricalEnvironment(Environment):
 			observations = self._base_env.observe(observation_mode, training=training)
 
 			if training:
-				return tf.gather_nd(self._image_data_train, observations)	
+				images = tf.cast(tf.gather_nd(self._image_data_train, observations), tf.float32)/255.0
 			else:
-				return tf.gather_nd(self._image_data_test, observations)	
+				images = tf.cast(tf.gather_nd(self._image_data_test, observations), tf.float32)/255.0	
+
+			#######
+			
+			padded_images = tf.pad(images, self._paddings, "CONSTANT")
+			#######
+			# print("padded_images shape = ", padded_images.shape)
+			return padded_images
+			
 
 
 		def properties(self):
@@ -451,7 +475,7 @@ class MNISTCategoricalEnvironment(Environment):
 
 		indices = tf.stack([target_val, img_index, x_patch_indices, y_patch_indices], axis=-1)
 		
-		print("indices shape - ", indices.shape)
+		# print("indices shape - ", indices.shape)
 		# tf.print(indices[:10, 0, 0, 0])
 		return indices
 

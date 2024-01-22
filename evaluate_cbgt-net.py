@@ -14,7 +14,7 @@ from cbgt_net.components import EvidenceShapePatchEncoderCIFAR, EvidenceShapePat
 from cbgt_net.components import SimpleAccumulatorModule
 from cbgt_net.components import FixedDecisionThresholdModule
 from cbgt_net.training.measures import AccuracyMeasure
-from cbgt_net.environments import CIFAR_CategoricalEnvironment, MNISTCategoricalEnvironmentPadded
+from cbgt_net.environments import CIFAR_CategoricalEnvironment, MNISTCategoricalEnvironment
 import seaborn as sns
 from sklearn.metrics import confusion_matrix
 import argparse
