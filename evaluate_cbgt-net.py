@@ -75,7 +75,7 @@ elif env_data == "mnist":
 					input_shape = patch_sz,
 					evidence_dim = 128,
 					use_resnet18 = True)
-	shape_env = MNISTCategoricalEnvironmentPadded(10, noise=0.0, batch_size=batch_size, 
+	shape_env = MNISTCategoricalEnvironment(10, noise=0.0, batch_size=batch_size, 
 					image_shape= patch_sz,
 					patch_size= org_patch_size,
 					images_per_class_train= 5421,
